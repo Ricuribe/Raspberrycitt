@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 import os
+import subprocess
+import time
 
 app = Flask(__name__)
 app.secret_key = ""
@@ -12,6 +14,10 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def start_monitor_script():
+    monitor_script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'monitor.py')
+    subprocess.Popen(['python3', monitor_script_path])
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -37,4 +43,6 @@ def upload_file():
     return render_template('upload.html')
 
 if __name__ == '__main__':
+    start_monitor_script()
+    time.sleep(2)  # Esperar un momento para asegurar que el monitor se inicie
     app.run(host='0.0.0.0', port=5000,debug=True)

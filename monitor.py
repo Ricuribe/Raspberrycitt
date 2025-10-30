@@ -12,7 +12,8 @@ class ImageHandler(FileSystemEventHandler):
     def start_feh_slideshow(self):
         if self.feh_process:
             self.feh_process.terminate()
-        self.feh_process = os.popen(["feh", "--slideshow-delay", "-F", "-Y", "-D", "300", self.folder_path],
+        
+        self.feh_process = subprocess.popen(["feh", "-F", "-Y", "-D", "300", self.folder_path],
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE)
         print("Slideshow iniciado con feh.")
