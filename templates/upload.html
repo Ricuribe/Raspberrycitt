@@ -1,22 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Subir Imágenes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Subir Imágenes al servidor</h1>
-    {%with messages = get_flashed_messages() %}
-        {%if messages %}
-            <ul>
-            {%for message in messages %}
-            <li>{{ message }}</li>
-            {%endfor %}
-            </ul>
-        {%endif %}
+    <div class="container">
+        <main class="card">
+            <h1>Subir Imágenes</h1>
 
-    {%endwith %}
-    <form method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept="image/*" required>
-        <input type="submit" value="Subir Imagen">
-    </form>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="messages">
+                        <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form method="post" enctype="multipart/form-data" class="upload-form">
+                <label class="file-label" for="file-input">
+                    <input id="file-input" type="file" name="file" accept="image/*" required>
+                    <span class="file-text">Seleccionar imagen</span>
+                </label>
+
+                <!-- nuevo campo de contraseña -->
+                <label for="password-input" class="file-label" style="padding:8px 12px;">
+                    <input id="password-input" type="password" name="password" placeholder="Contraseña" required style="display:inline-block;width:100%;border:none;background:transparent;outline:none">
+                </label>
+
+                <button class="btn" type="submit">Subir Imagen</button>
+            </form>
+
+            <!-- línea que muestra el archivo seleccionado -->
+            <div id="selected-file" class="selected-file" aria-live="polite" style="margin-top:12px;color:#4b5563;font-size:0.95rem;">
+                Ningún archivo seleccionado
+            </div>
+        </main>
+
+        <footer class="footer">
+            <small>Simple y responsivo — usable en escritorio y móvil.</small>
+        </footer>
+    </div>
+
+    <script>
+        // Actualiza la línea con el nombre del archivo seleccionado
+        (function(){
+            const fileInput = document.getElementById('file-input');
+            const selected = document.getElementById('selected-file');
+            if (!fileInput || !selected) return;
+
+            fileInput.addEventListener('change', function () {
+                if (!fileInput.files || fileInput.files.length === 0) {
+                    selected.textContent = 'Ningún archivo seleccionado';
+                    return;
+                }
+                if (fileInput.files.length === 1) {
+                    selected.textContent = 'Archivo seleccionado: ' + fileInput.files[0].name;
+                } else {
+                    selected.textContent = fileInput.files.length + ' archivos seleccionados';
+                }
+            });
+        })();
+    </script>
+</body>
 </html>

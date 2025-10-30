@@ -1,1 +1,1 @@
-"# Raspberrycitt" 
+Programa en python para exponer imágenes en un monitor con raspberry
